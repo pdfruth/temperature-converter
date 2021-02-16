@@ -1,0 +1,5 @@
+org/jboss/as/quickstarts/temperatureconverter/controller/TemperatureConverter.class
+org/jboss/as/quickstarts/temperatureconverter/controller/ScaleConverter.class
+org/jboss/as/quickstarts/temperatureconverter/ejb/Scale.class
+org/jboss/as/quickstarts/temperatureconverter/ejb/TemperatureConvertEJB.class
+org/jboss/as/quickstarts/temperatureconverter/ejb/Temperature.class
