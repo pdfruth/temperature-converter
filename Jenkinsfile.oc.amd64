@@ -1,0 +1,48 @@
+pipeline {
+    agent {
+        label 'x86'
+    }
+
+    environment {
+        //git = 'https://github.com/pdfruth/pdf-hello-world-http-java.git'   // Replace with your fork of the hello-world code
+        git = 'https://github.com/pdfruth/temperature-converter.git'
+        oc_token =  credentials('pdf-octoken-x86')                                // Replace with OpenShift Token from GUI
+        pullSecret =  credentials('pdf-pull-secret')
+        ocp_server = 'https://c115-e.us-south.containers.cloud.ibm.com:30689'
+        app = 'temperature-converter'
+    }
+
+    stages {
+        stage('Create Project') {
+            steps {
+                sh 'oc login --token=$oc_token --insecure-skip-tls-verify --server=$ocp_server'
+                //sh 'oc delete namespace $app --wait=true || true'
+                //sh 'oc new-project java-hello-world'
+                //sh 'kubectl create -f $pullSecret -n=$app'
+                //sh 'oc secrets link builder 13358228-test19918811112-pull-secret -n=$app'
+                //sh 'oc secrets link default 13358228-test19918811112-pull-secret -n=$app'
+            }
+        }
+
+        stage('Build and deploy') {
+            steps {
+                sh 'oc project pdf-$app'
+                sh 'oc delete bc $app || true'
+                sh 'oc delete deployment $app || true'
+                sh 'oc delete service $app || true'
+                sh 'oc delete route $app  || true'
+                sh 'oc new-app $git'
+                sh 'oc logs -f bc/$app'
+                sh 'sleep 15'
+            }
+        }
+
+        stage('Expose Route') {
+            steps {
+                sh 'oc project pdf-$app'
+                sh 'oc expose svc/$app'
+                sh 'oc get routes -o json | jq -r \'.items[0].spec.host\''
+            }
+        }
+    }
+}
