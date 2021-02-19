@@ -4,8 +4,8 @@ pipeline {
     }
 
     environment {
-        git = 'https://github.com/pdfruth/temperature-converter.git'   // Replace with your fork of the hello-world code
-        oc_token =  credentials('pdf-octoken-s390x')                                // Replace with OpenShift Token from GUI
+        git = 'https://github.com/pdfruth/temperature-converter.git'
+        oc_token =  credentials('pdf-octoken-s390x')
         pullSecret =  credentials('pdf-pull-secret')
         ocp_server = 'https://api.ocp1.ocp.local:6443'
         app = 'temperature-converter'
